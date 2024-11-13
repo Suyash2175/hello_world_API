@@ -4,24 +4,100 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hello World API</title>
-  <!-- Link to external CSS file -->
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Background and Centering */
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #f06, #ffba08, #51e2f5, #7d5fff);
+      background-size: 300% 300%;
+      animation: gradient 8s ease infinite;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Card Container */
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      width: 350px;
+      text-align: center;
+    }
+
+    /* Title Styling */
+    .card h1 {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Input and Button Styling */
+    .card input, .card button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    /* Button Styling */
+    .card button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .card button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Message Display Styling */
+    #message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+      min-height: 30px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
   <!-- Card Container -->
   <div class="card">
-    <h1>Select a Language</h1>
+    <h1>Select or Enter a Language</h1>
 
-    <!-- Language Selector -->
-    <select id="languageInput">
-      <option value="" disabled selected>Select a language</option>
-      <option value="English">English</option>
-      <option value="French">French</option>
-      <option value="Hindi">Hindi</option>
-      <option value="Spanish">Spanish</option>
-      <option value="German">German</option>
-    </select>
+    <!-- Combined Input and Dropdown List -->
+    <input list="languages" id="languageInput" placeholder="Type or select a language">
+    <datalist id="languages">
+      <option value="English">
+      <option value="French">
+      <option value="Hindi">
+      <option value="Spanish">
+      <option value="German">
+    </datalist>
 
     <!-- Button to Fetch Message -->
     <button onclick="fetchMessage()">Get Hello World Message</button>
@@ -33,7 +109,7 @@
   <script>
     // Fetch message function
     async function fetchMessage() {
-      // Get the selected language
+      // Get the input language
       const language = document.getElementById("languageInput").value;
       const url = `http://localhost:5000/hello?language=${encodeURIComponent(language)}`;
 
@@ -54,8 +130,12 @@
       }
     }
 
-    // Add event listener for Enter key on select input
-    document.getElementById("languageInput").addEventListener("change", fetchMessage);
+    // Add event listener for Enter key on language input
+    document.getElementById("languageInput").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        fetchMessage();
+      }
+    });
   </script>
 
 </body>
