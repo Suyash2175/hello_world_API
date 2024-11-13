@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello World API</title>
+  <!-- Link to external CSS file -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Card Container -->
+  <div class="card">
+    <h1>Select a Language</h1>
+
+    <!-- Language Selector -->
+    <select id="languageInput">
+      <option value="" disabled selected>Select a language</option>
+      <option value="English">English</option>
+      <option value="French">French</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Spanish">Spanish</option>
+      <option value="German">German</option>
+    </select>
+
+    <!-- Button to Fetch Message -->
+    <button onclick="fetchMessage()">Get Hello World Message</button>
+
+    <!-- Display Message Area -->
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // Fetch message function
+    async function fetchMessage() {
+      // Get the selected language
+      const language = document.getElementById("languageInput").value;
+      const url = `http://localhost:5000/hello?language=${encodeURIComponent(language)}`;
+
+      try {
+        // Fetch message from API
+        const response = await fetch(url);
+        
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById("message").innerText = data.message;
+        } else {
+          const errorData = await response.json();
+          document.getElementById("message").innerText = errorData.error;
+        }
+      } catch (error) {
+        document.getElementById("message").innerText = "Error connecting to the server.";
+        console.error("Error:", error);
+      }
+    }
+
+    // Add event listener for Enter key on select input
+    document.getElementById("languageInput").addEventListener("change", fetchMessage);
+  </script>
+
+</body>
+</html>
