@@ -107,25 +107,34 @@
   </div>
 
   <script>
+    // Predefined messages in case the server is offline
+    const fallbackMessages = {
+      English: "Hello World",
+      French: "Bonjour le monde",
+      Hindi: "नमस्ते दुनिया",
+      Spanish: "Hola Mundo",
+      German: "Hallo Welt"
+    };
+
     // Fetch message function
     async function fetchMessage() {
-      // Get the input language
       const language = document.getElementById("languageInput").value;
-      const url = `http://localhost:5000/hello?language=${encodeURIComponent(language)}`;
+      const url = `https://your-project-name.vercel.app/hello?language=${encodeURIComponent(language)}`;
 
       try {
-        // Fetch message from API
+        // Try fetching from the server
         const response = await fetch(url);
         
         if (response.ok) {
           const data = await response.json();
           document.getElementById("message").innerText = data.message;
         } else {
-          const errorData = await response.json();
-          document.getElementById("message").innerText = errorData.error;
+          // If the server returns an error, use the fallback message
+          document.getElementById("message").innerText = fallbackMessages[language] || "Language not supported.";
         }
       } catch (error) {
-        document.getElementById("message").innerText = "Error connecting to the server.";
+        // If fetch fails, use the fallback message
+        document.getElementById("message").innerText = fallbackMessages[language] || "Language not supported.";
         console.error("Error:", error);
       }
     }
